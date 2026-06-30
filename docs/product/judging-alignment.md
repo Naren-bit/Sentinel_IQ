@@ -24,4 +24,8 @@ This document outlines how SentinelIQ directly satisfies the core judging criter
 
 ## 6. Engineering
 **Criterion**: *Is the codebase clean, robust, and production-ready?*
-**Alignment**: The codebase features strict ESLint rules, Zustand state management (preventing prop drilling), complete separation of concerns between Express.js routes and business logic services, and thorough Markdown documentation and Mermaid diagrams mapping out the entire system architecture.
+**Alignment**: The codebase demonstrates mature software engineering fundamentals:
+- **Defensive Data Integrity (`_repairOffsets`)**: We built defensive repair logic because LLM-reported character offsets are notoriously unreliable. Rather than silently corrupting the UI, our provider auto-repairs hallucinatory indices using exact substring matching.
+- **Strict Schema Validation**: Detections are violently rejected if the reported text doesn't exactly match `documentText.substring(start, end)`.
+- **Honest Fallback Isolation**: We explicitly caught a subtle MockProvider data leakage bug where AI rate limits corrupted the UI. We solved it by isolating the error state, explicitly catching the timeout/failure, and routing to an honest fallback provider for the demo, rather than presenting corrupted data.
+- **Architecture**: The codebase features strict ESLint rules, Zustand state management (preventing prop drilling), complete separation of concerns between Express.js routes and business logic services, and thorough Markdown documentation.

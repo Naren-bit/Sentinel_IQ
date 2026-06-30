@@ -9,6 +9,8 @@ export interface Detection {
   drivingSignal?: string;
   start?: number;
   end?: number;
+  confidence?: number;
+  source?: string;
 }
 
 interface AppState {

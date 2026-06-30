@@ -119,7 +119,7 @@ async function runPipeline(documentText, forceDemo = false) {
 
   // Strip internal fields before sending to client
   const clientEnrichments = enrichments.map(({ _score, ...rest }) => rest);
-  const clientDetections = allDetections.map(({ source, ...rest }) => rest);
+  const clientDetections = allDetections; // Preserve source property
 
   return {
     detections: clientDetections,

@@ -9,8 +9,9 @@ The system operates in a strict, linear pipeline ensuring every document is proc
 1. **Detection Provider Interface**
    The entry point for AI analysis. An abstract interface that handles the communication with external Large Language Models (LLMs). It constructs the prompt, sends the document, and receives the raw JSON array of detected entities.
 
-2. **Detection Service**
-   The orchestration layer. It manages the primary provider (e.g., Gemini) and enforces strict timeouts. If the primary provider fails due to network issues, rate limits, or hallucinations, this layer gracefully handles the error, either throwing a user-facing exception or (in demo mode) falling back to a mock provider.
+2. **`providers/`**: The abstracted AI layer. Currently implements `CloudLLMProvider` (Google Gemini 2.5 Flash) and `MockProvider` (Offline Fallback Engine).
+    *   *Defensive Engineering (MockProvider Isolation)*: If the primary AI provider times out or fails (e.g. rate limits), the `DetectionService` catches the failure and silently falls back to the `MockProvider`. This isolates network volatility, preventing silent UI corruption and replacing it with an honest, robust fallback.
+    *   *Defensive Engineering (`_repairOffsets`)*: LLMs are notoriously bad at counting characters and returning exact substring indices. The `CloudLLMProvider` implements a `_repairOffsets` algorithm that uses exact string matching (`indexOf`) to find the true location of the LLM's returned text within the source document, preventing data-integrity failures where highlighted offsets don't match the actual text.
 
 3. **Verification Pass**
    A critical safety net. LLMs occasionally hallucinate numerical character offsets or completely miss standard formats (like SSNs). This layer runs deterministic regex rules (`findUndetectedCandidates`) to identify false negatives and re-calculates hallucinatory offsets using exact string matching.

@@ -43,6 +43,9 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
             <span className={`px-2.5 py-1 rounded-[6px] text-[10px] font-bold uppercase tracking-wider ${style.badgeBg} ${style.badgeText}`}>
               {detection.priorityTier}
             </span>
+            <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-semibold tracking-wide border ${detection.source === 'verification' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-slate-50 text-slate-600'}`}>
+              {detection.source === 'verification' ? 'Not redacted — flag found this' : 'Currently redacted — verify'}
+            </span>
             <span className="text-sm font-medium text-[var(--on-surface-variant)]">{detection.detectionId}</span>
             <span className="text-sm text-[var(--on-surface)]">{detection.type}</span>
             {detection.confidence !== undefined && (
@@ -94,7 +97,7 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
                 onClick={() => onReview?.(detection.detectionId)}
                 className="rounded-[20px] px-6 bg-[var(--primary)] hover:bg-[var(--primary-container)] text-white shadow-sm transition-transform hover:-translate-y-0.5"
               >
-                Approve
+                {detection.source === 'verification' ? 'Confirm Gap Redaction' : 'Approve AI Flag'}
               </Button>
             ) : (
               <div className="flex items-center gap-2 text-[var(--tertiary)] font-medium px-4 py-2">
