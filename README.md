@@ -18,6 +18,11 @@ Fully automated AI redaction systems are dangerous because Large Language Models
 ## 💡 Core Insight
 Not all PII detections require the same cognitive effort. By ranking the AI's detections based on **human cognitive risk**—placing ambiguous, hard-to-see, low-confidence, and high-severity items at the absolute top of the queue—we ensure the reviewer's freshest attention is spent on the most dangerous potential data leaks.
 
+## 🌟 Novelty & Uniqueness
+Most PII redaction tools compete entirely on **Extraction Accuracy** (trying to build a better AI that misses less). SentinelIQ takes a completely unique approach by focusing on **Human Psychology and Reviewer Fatigue**. 
+Instead of treating all AI detections equally, SentinelIQ introduces a deterministic **Priority Engine** that asks: *"How likely is a human to miss this?"* 
+By quantifying visual density, single-occurrences, formatting anomalies, and AI uncertainty, SentinelIQ creates an **Attention Queue** that forces humans to triage the most dangerous and hidden leaks first. It acknowledges that Humans-in-the-Loop are the ultimate safety net, and optimizes the UI to protect them from fatigue.
+
 ---
 
 ## 🏗️ Architecture

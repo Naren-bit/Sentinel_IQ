@@ -15,6 +15,11 @@ By ranking the detections based on **human cognitive risk**—putting the ambigu
 ## Solution
 **SentinelIQ**: A Human-in-the-Loop review dashboard that uses a zero-shot LLM (Gemini 2.5 Flash) to extract entities, and a deterministic Priority Engine to score them. It builds an "Attention Queue" that forces the reviewer to handle the `HIGH` priority anomalies first.
 
+## The Novelty (Why it's Unique)
+Most AI-driven PII solutions compete in a technological arms race to achieve 100% extraction accuracy—a goal that is ultimately impossible due to LLM hallucinations and the messy reality of unstructured data. 
+**SentinelIQ is unique because it treats PII redaction as a Human-Computer Interaction (HCI) problem, not just an AI extraction problem.** 
+By quantifying *why* a human might miss a specific data leak (e.g., visual fatigue, dense text blocks, non-canonical formatting) and elevating those specific items, SentinelIQ safely bridges the gap between imperfect AI and exhausted human reviewers. It does not replace the human; it optimizes their cognitive load.
+
 ## Future Improvements
 - **Optical Character Recognition (OCR)**: Integrating an OCR engine to process scanned image PDFs before passing the text to Gemini.
 - **Custom Priority Rubrics**: Allowing enterprise organizations to weight the priority heuristics (e.g., heavily weighting healthcare terms for HIPAA compliance).
