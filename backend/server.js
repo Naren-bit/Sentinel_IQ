@@ -112,12 +112,18 @@ async function runPipeline(documentText, forceDemo = false) {
   const { detections: providerDetections, fallbackOccurred } = await detectionService.detect(documentText, forceDemo);
   console.log(`[Pipeline] Provider returned ${providerDetections.length} detections.`);
 
-  // Validate provider detections (log warnings but don't fail)
+  // Validate provider detections — collect warnings for the client
+  const validationWarnings = [];
   for (const det of providerDetections) {
     const result = validateDetection(det);
     if (!result.valid) {
-      console.warn(`[Pipeline] Detection ${det.id} validation warning: ${result.errors.join(', ')}`);
+      const warning = `Detection ${det.id} ("${det.text}"): ${result.errors.join(', ')}`;
+      console.warn(`[Pipeline] Validation warning: ${warning}`);
+      validationWarnings.push({ detectionId: det.id, errors: result.errors });
     }
+  }
+  if (validationWarnings.length > 0) {
+    console.log(`[Pipeline] ${validationWarnings.length} detection(s) failed schema validation (logged as warnings).`);
   }
 
   // Step 2: Verification pass — gap detection for missed candidates
@@ -143,7 +149,8 @@ async function runPipeline(documentText, forceDemo = false) {
     detections: clientDetections,
     enrichments: clientEnrichments,
     documentText,
-    fallbackOccurred
+    fallbackOccurred,
+    validationWarnings,
   };
 }
 

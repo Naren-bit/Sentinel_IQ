@@ -266,7 +266,27 @@ class MockProvider extends DetectionProvider {
         end: 0,
         type: PII_TYPES.OTHER,
         confidence: 0.98,
-      }
+      },
+
+      // ── INTENTIONAL VALIDATION ERRORS — demonstrates validateDetection catching bad data ──
+      // These detections have deliberate schema violations so the pipeline's
+      // validation pass logs warnings, proving the verification layer works.
+      {
+        id: 'det-invalid-1',
+        text: 'March 15, 2024',       // A date string — not a recognized PII type
+        start: 0,
+        end: 0,
+        type: 'DATE',                 // ← Invalid: not in PII_TYPES enum
+        confidence: 0.75,
+      },
+      {
+        id: 'det-invalid-2',
+        text: 'HR-412',               // Policy reference number
+        start: 0,
+        end: 0,
+        type: PII_TYPES.ID,
+        confidence: 1.5,              // ← Invalid: confidence must be 0.0–1.0
+      },
     ];
 
     const finalDetections = [];

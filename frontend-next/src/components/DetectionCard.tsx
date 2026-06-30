@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, MoreHorizontal } from "lucide-react";
+import { CheckCircle2, MoreHorizontal, XCircle } from "lucide-react";
 import type { Detection } from "@/lib/store";
 
 interface DetectionCardProps {
   detection: Detection;
   isReviewed?: boolean;
+  onApprove?: (id: string) => void;
+  onDismiss?: (id: string) => void;
   onReview?: (id: string) => void;
   showAction?: boolean;
+  outcome?: 'approved' | 'dismissed' | null;
 }
 
-export function DetectionCard({ detection, isReviewed = false, onReview, showAction = true }: DetectionCardProps) {
+export function DetectionCard({ detection, isReviewed = false, onApprove, onDismiss, onReview, showAction = true, outcome: externalOutcome }: DetectionCardProps) {
   // Lumina Colors based on Priority
   const tierStyles = {
     HIGH: {
@@ -37,11 +40,25 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
   };
 
   const style = tierStyles[detection.priorityTier] || tierStyles.STANDARD;
-  const [outcome, setOutcome] = useState<'approved' | 'dismissed' | null>(null);
+  const [localOutcome, setLocalOutcome] = useState<'approved' | 'dismissed' | null>(null);
+  const outcome = externalOutcome ?? localOutcome;
 
-  const handleAction = (action: 'approved' | 'dismissed') => {
-    setOutcome(action);
-    onReview?.(detection.detectionId);
+  const handleApprove = () => {
+    setLocalOutcome('approved');
+    if (onApprove) {
+      onApprove(detection.detectionId);
+    } else if (onReview) {
+      onReview(detection.detectionId);
+    }
+  };
+
+  const handleDismiss = () => {
+    setLocalOutcome('dismissed');
+    if (onDismiss) {
+      onDismiss(detection.detectionId);
+    } else if (onReview) {
+      onReview(detection.detectionId);
+    }
   };
 
   return (
@@ -103,13 +120,13 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
                   <>
                     <Button 
                       variant="outline"
-                      onClick={() => handleAction('dismissed')}
+                      onClick={handleDismiss}
                       className="rounded-[20px] px-6 text-[var(--on-surface-variant)] border-[var(--outline)]"
                     >
                       Ignore
                     </Button>
                     <Button 
-                      onClick={() => handleAction('approved')}
+                      onClick={handleApprove}
                       className="rounded-[20px] px-6 bg-[var(--primary)] hover:bg-[var(--primary-container)] text-white shadow-sm transition-transform hover:-translate-y-0.5"
                     >
                       Confirm Gap Redaction
@@ -119,13 +136,13 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
                   <>
                     <Button 
                       variant="outline"
-                      onClick={() => handleAction('dismissed')}
+                      onClick={handleDismiss}
                       className="rounded-[20px] px-6 text-[var(--on-surface-variant)] border-[var(--outline)]"
                     >
                       Dismiss (Reveal)
                     </Button>
                     <Button 
-                      onClick={() => handleAction('approved')}
+                      onClick={handleApprove}
                       className="rounded-[20px] px-6 bg-[var(--primary)] hover:bg-[var(--primary-container)] text-white shadow-sm transition-transform hover:-translate-y-0.5"
                     >
                       Approve AI Flag
@@ -134,13 +151,12 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2 text-[var(--tertiary)] font-medium px-4 py-2">
-                <CheckCircle2 className="w-5 h-5" />
+              <div className={`flex items-center gap-2 font-medium px-4 py-2 ${outcome === 'dismissed' ? 'text-amber-600' : 'text-[var(--tertiary)]'}`}>
                 {outcome === 'dismissed' 
-                  ? "Reveal confirmed — this stays visible" 
+                  ? <><XCircle className="w-5 h-5" /> Dismissed — PII stays visible</>
                   : outcome === 'approved' 
-                    ? "Redaction added — this is now hidden" 
-                    : "Reviewed (Bulk)"}
+                    ? <><CheckCircle2 className="w-5 h-5" /> Approved — will be redacted</>
+                    : <><CheckCircle2 className="w-5 h-5" /> Reviewed (Bulk — will be redacted)</>}
               </div>
             )}
           </div>

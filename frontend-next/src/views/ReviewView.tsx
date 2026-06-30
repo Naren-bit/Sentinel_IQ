@@ -11,12 +11,17 @@ import {
   HelpCircle, 
   Settings, 
   History,
-  FileDigit
+  FileDigit,
+  AlertTriangle
 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export function ReviewView() {
-  const { documentName, detections, reviewedIds, markReviewed, bulkApprove, viewEnteredAt, fallbackOccurred } = useStore();
+  const { 
+    documentName, detections, reviewedIds, approvedIds, dismissedIds,
+    markApproved, markDismissed, bulkApprove, viewEnteredAt, fallbackOccurred,
+    validationWarnings 
+  } = useStore();
   const [activeTab, setActiveTab] = useState("queue");
   const [nudgeVisible, setNudgeVisible] = useState(false);
   const [nudgeMessage, setNudgeMessage] = useState("");
@@ -132,6 +137,23 @@ export function ReviewView() {
               </div>
             )}
 
+            {validationWarnings.length > 0 && (
+              <div className="max-w-4xl mx-auto mb-6 animate-in fade-in slide-in-from-top text-sm text-amber-800 bg-amber-50 border border-amber-200 px-4 py-3 rounded-[12px] shadow-sm">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertTriangle className="w-5 h-5 text-amber-600" />
+                  <span className="font-bold">Schema Validation Warnings ({validationWarnings.length})</span>
+                </div>
+                <ul className="space-y-1 pl-7 text-xs">
+                  {validationWarnings.map((w, i) => (
+                    <li key={i} className="flex items-start gap-1">
+                      <span className="text-amber-500 mt-0.5">•</span>
+                      <span><span className="font-semibold">{w.detectionId}</span>: {w.errors.join(', ')}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {nudgeVisible && (
               <div className="max-w-4xl mx-auto mb-6 animate-in fade-in slide-in-from-top text-sm text-[var(--on-error-container)] bg-[var(--error-container)] border border-[var(--error)]/20 px-4 py-3 rounded-[12px] flex items-center gap-2 shadow-sm">
                 <AlertCircle className="w-5 h-5" />
@@ -168,7 +190,8 @@ export function ReviewView() {
                         <DetectionCard 
                           key={d.detectionId} 
                           detection={d} 
-                          onReview={markReviewed}
+                          onApprove={markApproved}
+                          onDismiss={markDismissed}
                         />
                       ))}
                     </div>
@@ -184,6 +207,7 @@ export function ReviewView() {
                             detection={d} 
                             isReviewed={true}
                             showAction={false}
+                            outcome={approvedIds.has(d.detectionId) ? 'approved' : dismissedIds.has(d.detectionId) ? 'dismissed' : null}
                           />
                         ))}
                       </div>
@@ -274,7 +298,7 @@ export function ReviewView() {
           {/* Bottom Sticky Action Bar */}
           <div className="absolute bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-[var(--outline-variant)]/40 px-10 py-4 flex justify-between items-center z-20">
             <div className="text-sm text-[var(--on-surface-variant)] font-medium">
-              <span className="text-[var(--on-surface)] font-bold">{reviewedIds.size} items reviewed.</span> {detections.length - reviewedIds.size} remaining in Full Document.
+              <span className="text-[var(--on-surface)] font-bold">{reviewedIds.size} items reviewed</span> ({approvedIds.size} redacted, {dismissedIds.size} dismissed). {detections.length - reviewedIds.size} remaining.
             </div>
             <Button 
               onClick={handleBulkApprove} 
@@ -290,9 +314,9 @@ export function ReviewView() {
 }
 
 function DocumentHighlighter() {
-  const { documentText, detections, reviewedIds, markReviewed } = useStore();
+  const { documentText, detections, reviewedIds, approvedIds, dismissedIds, markApproved, markDismissed } = useStore();
 
-  const segments = [];
+  const segments: { text: string; isHighlight: boolean; detection?: typeof detections[0] }[] = [];
   let lastIndex = 0;
   
   const sorted = [...detections].sort((a, b) => (a.start || 0) - (b.start || 0));
@@ -334,6 +358,8 @@ function DocumentHighlighter() {
         
         if (isReviewed) colorClass = "bg-transparent border-b-2 border-[var(--outline-variant)] text-[var(--outline)]";
 
+        const outcome = approvedIds.has(det.detectionId) ? 'approved' as const : dismissedIds.has(det.detectionId) ? 'dismissed' as const : null;
+
         return (
           <Popover key={i}>
             <PopoverTrigger
@@ -347,8 +373,10 @@ function DocumentHighlighter() {
               <DetectionCard 
                 detection={det}
                 isReviewed={isReviewed}
-                onReview={markReviewed}
+                onApprove={markApproved}
+                onDismiss={markDismissed}
                 showAction={true}
+                outcome={outcome}
               />
             </PopoverContent>
           </Popover>

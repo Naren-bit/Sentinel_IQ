@@ -21,6 +21,7 @@ export function Upload() {
         fileName?: string;
         documentText?: string;
         fallbackOccurred?: boolean;
+        validationWarnings?: { detectionId: string; errors: string[] }[];
       };
       const rawDetections = data.detections || [];
       const enrichments = data.enrichments || [];
@@ -49,7 +50,8 @@ export function Upload() {
         name: data.fileName || defaultName,
         text: data.documentText || "",
         detections: mergedDetections,
-        fallbackOccurred: data.fallbackOccurred
+        fallbackOccurred: data.fallbackOccurred,
+        validationWarnings: data.validationWarnings,
       });
     } catch (err: unknown) {
       setError((err as Error).message || "An error occurred");
