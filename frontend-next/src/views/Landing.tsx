@@ -8,7 +8,7 @@ export function Landing() {
   const { setScreen, reset } = useStore();
 
   return (
-    <div className="min-h-screen bg-[var(--background)] relative overflow-hidden font-sans">
+    <div className="min-h-screen relative overflow-hidden font-sans">
       
       {/* Live Liquid Glass Background */}
       <LiquidBackground />

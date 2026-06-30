@@ -173,7 +173,7 @@ void main() {
   }, []);
 
   return (
-    <div className="fixed inset-0 w-full h-full -z-10" style={{ display: 'block' }}>
+    <div className="fixed inset-0 w-full h-full z-0" style={{ display: 'block' }}>
       <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
     </div>
   );
