@@ -22,7 +22,29 @@ Not all PII detections require the same cognitive effort. By ranking the AI's de
 
 ## 🏗️ Architecture
 
-![Architecture Diagram](docs/diagrams/architecture.mmd)
+```mermaid
+graph TD
+    User([User]) -->|Uploads Document| Frontend[Frontend React Application]
+    Frontend -->|POST /upload| API[Express API Layer]
+    
+    API -->|1. Raw Document| DetectionService[Detection Service Orchestrator]
+    
+    DetectionService -->|2. Send Prompt| ProviderInterface{Detection Provider}
+    ProviderInterface -->|Cloud Route| Gemini[Google Gemini 2.5 Flash]
+    ProviderInterface -->|Fallback Route| Mock[Offline Mock Engine]
+    
+    Gemini -->|3. Raw JSON Entities| DetectionService
+    Mock -->|3. Hardcoded JSON| DetectionService
+    
+    DetectionService -->|4. Validated Detections| Verification[Verification Pass]
+    Verification -->|5. Recalculate Offsets & Gap Detection| PriorityEngine[Review Priority Engine]
+    
+    PriorityEngine -->|6. Scored & Ranked Detections| API
+    API -->|7. Enriched Payload| Frontend
+    
+    Frontend -->|8. Visual Highlights| Human[Human Reviewer]
+    Human -->|9. Approves High-Risk Items| Final[Secure & Approved Document]
+```
 
 *(Note: See the `docs/architecture/` folder for detailed system designs and sequence flows).*
 
