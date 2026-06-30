@@ -9,16 +9,18 @@ interface StepCardProps {
 }
 
 export function StepCard({ title, description, icon: Icon, colorClass, delayClass = "" }: StepCardProps) {
-  // Extract border color and bg color from colorClass
-  // e.g. "text-[var(--primary)] bg-[var(--surface-container)] border-[var(--primary)]"
-  
+  const iconText = colorClass.match(/text-\[.*?\]/)?.[0] || '';
+  const iconBg = colorClass.match(/bg-\[.*?\]/)?.[0] || 'bg-white/50';
+
   return (
-    <div className={`relative overflow-hidden bg-white/70 backdrop-blur-[16px] rounded-[16px] shadow-[0_12px_40px_rgba(31,41,55,0.06)] hover:shadow-[0_24px_60px_rgba(31,41,55,0.12)] transition-all duration-300 border-l-[4px] border-y border-r border-y-white border-r-white group p-[32px] animate-float ${delayClass} ${colorClass.match(/border-\[.*?\]/)?.[0] || ''}`}>
+    <div className={`relative overflow-hidden bg-white/30 backdrop-blur-[24px] rounded-[24px] shadow-[0_8px_32px_rgba(31,41,55,0.08)] hover:shadow-[0_24px_60px_rgba(31,41,55,0.12)] border border-white/40 hover:bg-white/40 hover:border-white/60 transition-all duration-500 group p-[32px] animate-float ${delayClass}`}>
+      <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      
       <div className="relative z-10 flex flex-col h-full">
-        <div className={`w-12 h-12 rounded-[12px] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${colorClass.match(/text-\[.*?\]/)?.[0] || ''} ${colorClass.match(/bg-\[.*?\]/)?.[0] || ''}`}>
-          <Icon className="w-6 h-6" />
+        <div className={`w-14 h-14 rounded-[16px] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${iconText} ${iconBg} shadow-sm border border-white/50 backdrop-blur-md`}>
+          <Icon className="w-7 h-7" />
         </div>
-        <h3 className="text-2xl font-semibold text-[var(--on-surface)] mb-3">{title}</h3>
+        <h3 className="text-2xl font-bold text-[var(--on-surface)] mb-3">{title}</h3>
         <p className="text-[var(--on-surface-variant)] leading-[1.6] text-base">{description}</p>
       </div>
     </div>

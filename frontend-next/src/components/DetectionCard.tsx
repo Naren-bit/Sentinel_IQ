@@ -14,22 +14,25 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
   // Lumina Colors based on Priority
   const tierStyles = {
     HIGH: {
-      border: "border-l-[var(--error)]",
+      cardBg: "bg-gradient-to-br from-[var(--error)]/10 to-transparent",
       badgeBg: "bg-[var(--error-container)]",
       badgeText: "text-[var(--on-error-container)]",
-      textHighlight: "text-[var(--primary)] underline",
+      textHighlight: "text-[var(--error)] underline",
+      scoreText: "text-[var(--error)]",
     },
     STANDARD: {
-      border: "border-l-[var(--primary)]",
+      cardBg: "bg-gradient-to-br from-[var(--primary)]/10 to-transparent",
       badgeBg: "bg-[var(--primary-container)]/10",
       badgeText: "text-[var(--primary)]",
       textHighlight: "text-[var(--primary)] underline",
+      scoreText: "text-[var(--primary)]",
     },
     LOW: {
-      border: "border-l-[var(--tertiary)]",
+      cardBg: "bg-gradient-to-br from-[var(--tertiary)]/10 to-transparent",
       badgeBg: "bg-[var(--tertiary-fixed)]",
       badgeText: "text-[var(--on-tertiary-fixed)]",
       textHighlight: "text-[var(--tertiary)] underline",
+      scoreText: "text-[var(--tertiary)]",
     },
   };
 
@@ -42,9 +45,10 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
   };
 
   return (
-    <div className={`relative bg-white/80 backdrop-blur-[16px] rounded-[16px] shadow-[0_4px_20px_rgba(31,41,55,0.04)] border-y border-r border-y-[var(--outline-variant)]/40 border-r-[var(--outline-variant)]/40 border-l-4 ${style.border} transition-all duration-300 ${isReviewed ? 'opacity-60 grayscale-[50%] scale-[0.98]' : 'opacity-100 hover:shadow-[0_12px_40px_rgba(31,41,55,0.08)]'}`}>
-      
-      <div className="p-6">
+    <div className="flex items-stretch gap-4 w-full">
+      <div className={`flex-1 relative overflow-hidden ${style.cardBg} bg-white/20 backdrop-blur-[24px] rounded-[24px] shadow-[0_8px_32px_rgba(31,41,55,0.08)] border border-white/40 transition-all duration-500 ${isReviewed ? 'opacity-60 grayscale-[50%] scale-[0.98]' : 'opacity-100 hover:shadow-[0_16px_48px_rgba(31,41,55,0.12)] hover:border-white/60 hover:bg-white/30'}`}>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-50 pointer-events-none" />
+        <div className="relative z-10 p-6">
         <div className="flex justify-between items-start mb-6">
           <div className="flex items-center gap-4">
             <span className={`px-2.5 py-1 rounded-[6px] text-[10px] font-bold uppercase tracking-wider ${style.badgeBg} ${style.badgeText}`}>
@@ -55,12 +59,6 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
             </span>
             <span className="text-sm font-medium text-[var(--on-surface-variant)]">{detection.detectionId}</span>
             <span className="text-sm text-[var(--on-surface)]">{detection.type}</span>
-            {detection.confidence !== undefined && (
-              <span className="text-[12px] font-medium text-[var(--outline)] flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--outline)]/50"></span>
-                {(detection.confidence * 100).toFixed(0)}% Confidence
-              </span>
-            )}
           </div>
           <button className="text-[var(--outline)] hover:text-[var(--on-surface)] transition-colors">
             <MoreHorizontal className="w-5 h-5" />
@@ -147,7 +145,22 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
             )}
           </div>
         )}
+        </div>
       </div>
+      
+      {detection.confidence !== undefined && (
+        <div className={`w-28 shrink-0 relative overflow-hidden ${style.cardBg} bg-white/20 backdrop-blur-[24px] rounded-[24px] shadow-[0_8px_32px_rgba(31,41,55,0.08)] border border-white/40 transition-all duration-500 flex flex-col items-center justify-center p-4 ${isReviewed ? 'opacity-60 grayscale-[50%] scale-[0.98]' : 'opacity-100 hover:shadow-[0_16px_48px_rgba(31,41,55,0.12)] hover:border-white/60 hover:bg-white/30'}`}>
+          <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-50 pointer-events-none" />
+          <div className="relative z-10 flex flex-col items-center text-center">
+            <span className={`text-4xl font-black ${style.scoreText} mb-2 drop-shadow-sm`}>
+              {(detection.confidence * 100).toFixed(0)}<span className="text-xl">%</span>
+            </span>
+            <span className="text-[10px] font-bold text-[var(--on-surface-variant)] uppercase tracking-widest leading-tight">
+              Confidence<br/>Score
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

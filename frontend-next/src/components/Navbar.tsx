@@ -35,11 +35,13 @@ export function Navbar() {
     };
 
     window.addEventListener('scroll', handleScroll, { capture: true, passive: true });
-    return () => window.removeEventListener('scroll', handleScroll, { capture: true } as any);
+    return () => window.removeEventListener('scroll', handleScroll, { capture: true } as EventListenerOptions);
   }, []);
 
+  const showNavbar = isVisible || currentScreen === 'review';
+
   return (
-    <nav className={`fixed left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[1440px] z-50 flex items-center justify-between px-4 py-3 bg-white/50 backdrop-blur-[20px] border border-white/40 shadow-[0_8px_32px_rgba(31,41,55,0.08)] rounded-full transition-all duration-300 ${isVisible ? 'top-6 opacity-100' : '-top-24 opacity-0 pointer-events-none'}`}>
+    <nav className={`fixed left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[1440px] z-50 flex items-center justify-between px-4 py-3 bg-white/50 backdrop-blur-[20px] border border-white/40 shadow-[0_8px_32px_rgba(31,41,55,0.08)] rounded-full transition-all duration-300 ${showNavbar ? 'top-6 opacity-100' : '-top-24 opacity-0 pointer-events-none'}`}>
       <div className="flex items-center gap-2 pl-4">
         <Shield className="w-6 h-6 text-[var(--primary)] fill-[var(--primary)]" />
         <span className="text-xl font-bold text-[var(--on-surface)] tracking-tight">SentinelIQ</span>
@@ -61,8 +63,6 @@ export function Navbar() {
           }>
           Review Queue
         </button>
-        <button className="text-[var(--on-surface-variant)] hover:text-[var(--on-surface)] hover:bg-black/5 transition-all px-4 py-2 rounded-full cursor-pointer">Audit Logs</button>
-        <button className="text-[var(--on-surface-variant)] hover:text-[var(--on-surface)] hover:bg-black/5 transition-all px-4 py-2 rounded-full cursor-pointer">Settings</button>
       </div>
       {currentScreen === 'landing' ? (
         <Button 

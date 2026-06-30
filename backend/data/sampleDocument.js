@@ -46,6 +46,11 @@ Recommended Actions:
 This matter has been escalated to the Chief Privacy Officer, Linda Zhao, whose direct line is 5035550193. Please also note that Mr. Smith's personal cell for follow-up outside business hours is 503.555.0184 and his home address is 4721 NE Hawthorne Blvd Apt 3B Portland OR 97213. All communications regarding this incident should reference case number PIR-2024-0312 and be marked confidential.
 
 Prepared by: Angela Torres, HR Investigations
-Distribution: CPO, General Counsel, IT Security Director`;
+Distribution: CPO, General Counsel, IT Security Director
+
+External Links and References:
+Vendor Website: https://apex-digital-forensics.com/portal/case-2024
+Vendor Office: 1900 3rd Ave, Seattle, WA 98101
+Partner Org: Northwest Security Partners`;
 
 module.exports = { SAMPLE_DOCUMENT };

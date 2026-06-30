@@ -70,7 +70,7 @@ CRITICAL RULES:
 1. The "text" field MUST be the EXACT substring of the document at position [start, end).
 2. The "start" and "end" offsets MUST be accurate character positions in the document.
 3. document.substring(start, end) MUST equal the "text" field exactly.
-4. Include names, phone numbers, email addresses, physical addresses, ID numbers (SSN, employee IDs, badge numbers), and any other personally identifiable information.
+4. Include person names (including titles like Mr., Ms., Dr.), company/organization names, phone numbers, email addresses, physical addresses (including office locations), URLs/web addresses, ID numbers (SSN, employee IDs, badge numbers), and any other personally identifiable information.
 5. For confidence: use higher values (0.85-0.99) for clearly formatted PII, lower values (0.50-0.75) for ambiguous or non-standard formats.
 
 Return ONLY a JSON array of detection objects. No markdown formatting, no code fences, no explanation — just the raw JSON array.

@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { FileUp, FileText, Loader2, AlertCircle, Shield, Monitor, Zap, FileSpreadsheet } from "lucide-react";
+import { FileUp, FileText, Loader2, AlertCircle, Zap, FileSpreadsheet } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { reviewDocument, uploadDocument } from "@/lib/api";
 
@@ -9,20 +9,27 @@ export function Upload() {
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  const { setLoading, setError, setReviewData, loading, error, setScreen, reset } = useStore();
+  const { setLoading, setError, setReviewData, loading, error } = useStore();
 
   const handleAction = async (action: () => Promise<unknown>, defaultName: string) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await action() as any;
+      const data = await action() as {
+        detections?: { id: string; text: string; type: string; start: number; end: number }[];
+        enrichments?: { detectionId: string; priorityTier: string; reasons: string[]; drivingSignal?: string }[];
+        fileName?: string;
+        documentText?: string;
+        fallbackOccurred?: boolean;
+      };
       const rawDetections = data.detections || [];
       const enrichments = data.enrichments || [];
       
-      const mergedDetections = rawDetections.map((det: any) => {
-        const enrichment = enrichments.find((e: any) => e.detectionId === det.id) || {
+      const mergedDetections = rawDetections.map((det: { id: string; text: string; type: string; start: number; end: number }) => {
+        const enrichment = enrichments.find((e: { detectionId: string; priorityTier: string; reasons: string[]; drivingSignal?: string }) => e.detectionId === det.id) || {
           priorityTier: 'LOW',
-          reasons: []
+          reasons: [],
+          drivingSignal: undefined
         };
         return {
           detectionId: det.id,
@@ -30,9 +37,11 @@ export function Upload() {
           type: det.type,
           start: det.start,
           end: det.end,
-          priorityTier: enrichment.priorityTier,
+          priorityTier: enrichment.priorityTier as 'LOW' | 'STANDARD' | 'HIGH',
           reasons: enrichment.reasons,
           drivingSignal: enrichment.drivingSignal,
+          confidence: det.confidence,
+          source: det.source,
         };
       });
 
@@ -70,7 +79,9 @@ export function Upload() {
 
             <div className="grid md:grid-cols-3 gap-6">
               {/* File Upload Zone */}
-              <div className="bg-white/70 backdrop-blur-[16px] border border-white rounded-[24px] shadow-[0_4px_20px_rgba(31,41,55,0.04)] p-8 flex flex-col h-[400px]">
+              <div className="relative overflow-hidden bg-white/30 backdrop-blur-[24px] border border-white/40 rounded-[24px] shadow-[0_8px_32px_rgba(31,41,55,0.08)] p-8 flex flex-col h-[400px]">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-50 pointer-events-none" />
+                <div className="relative z-10 flex flex-col h-full">
                 <h3 className="font-semibold text-lg text-[var(--on-surface)] mb-6 flex items-center gap-2">
                   <FileUp className="w-5 h-5 text-[var(--primary)]" />
                   Upload Document
@@ -118,10 +129,13 @@ export function Upload() {
                     Browse Files
                   </Button>
                 </div>
+                </div>
               </div>
 
               {/* Paste Text Zone */}
-              <div className="bg-white/70 backdrop-blur-[16px] border border-[var(--primary)]/20 rounded-[24px] shadow-[0_4px_20px_rgba(31,41,55,0.04)] p-8 flex flex-col h-[400px]">
+              <div className="relative overflow-hidden bg-white/30 backdrop-blur-[24px] border border-[var(--primary)]/30 rounded-[24px] shadow-[0_8px_32px_rgba(31,41,55,0.08)] p-8 flex flex-col h-[400px]">
+                <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 via-transparent to-transparent opacity-50 pointer-events-none" />
+                <div className="relative z-10 flex flex-col h-full">
                 <h3 className="font-semibold text-lg text-[var(--on-surface)] mb-6 flex items-center gap-2">
                   <FileText className="w-5 h-5 text-[var(--primary)]" />
                   Paste Text
@@ -141,10 +155,13 @@ export function Upload() {
                   {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
                   Analyze Text
                 </Button>
+                </div>
               </div>
 
               {/* Quick Start Zone */}
-              <div className="bg-white/70 backdrop-blur-[16px] border border-white rounded-[24px] shadow-[0_4px_20px_rgba(31,41,55,0.04)] p-8 flex flex-col h-[400px]">
+              <div className="relative overflow-hidden bg-white/30 backdrop-blur-[24px] border border-white/40 rounded-[24px] shadow-[0_8px_32px_rgba(31,41,55,0.08)] p-8 flex flex-col h-[400px]">
+                <div className="absolute inset-0 bg-gradient-to-br from-[var(--tertiary)]/10 via-transparent to-transparent opacity-50 pointer-events-none" />
+                <div className="relative z-10 flex flex-col h-full">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="font-semibold text-lg text-[var(--on-surface)] flex items-center gap-2">
                     <Zap className="w-5 h-5 text-[var(--tertiary)]" />
@@ -169,6 +186,7 @@ export function Upload() {
                       Contains synthetic PII for testing.
                     </p>
                   </button>
+                </div>
                 </div>
               </div>
             </div>

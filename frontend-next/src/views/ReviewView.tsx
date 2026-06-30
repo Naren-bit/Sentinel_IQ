@@ -7,8 +7,6 @@ import {
   List, 
   CheckCircle2, 
   AlertCircle, 
-  Monitor, 
-  Shield, 
   Search, 
   HelpCircle, 
   Settings, 
@@ -18,7 +16,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export function ReviewView() {
-  const { documentName, detections, reviewedIds, markReviewed, bulkApprove, viewEnteredAt, fallbackOccurred, reset } = useStore();
+  const { documentName, detections, reviewedIds, markReviewed, bulkApprove, viewEnteredAt, fallbackOccurred } = useStore();
   const [activeTab, setActiveTab] = useState("queue");
   const [nudgeVisible, setNudgeVisible] = useState(false);
   const [nudgeMessage, setNudgeMessage] = useState("");
@@ -65,7 +63,7 @@ export function ReviewView() {
   }, [nudgeVisible]);
 
   return (
-    <div className="min-h-screen bg-transparent font-sans flex flex-col items-center overflow-hidden relative">
+    <div className="h-screen bg-transparent font-sans flex flex-col items-center overflow-hidden relative">
         
       {/* Wrapper perfectly aligned with Navbar */}
       <div className="w-full max-w-[1440px] px-6 pt-28 pb-6 flex gap-6 flex-1 overflow-hidden relative z-10">

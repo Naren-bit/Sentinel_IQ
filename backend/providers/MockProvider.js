@@ -26,7 +26,8 @@ class MockProvider extends DetectionProvider {
   async detect(documentText) {
     // Return the hardcoded detections regardless of input.
     // Offsets are calibrated against the fixed sample document in sampleDocument.js.
-    return [
+    // Find detections dynamically to support custom uploads
+    const rawDetections = [
       // ── Early document, obvious PII, high confidence → should score LOW priority ──
       {
         id: 'det-001',
@@ -162,7 +163,137 @@ class MockProvider extends DetectionProvider {
         type: PII_TYPES.NAME,
         confidence: 0.70, // Very late, single occurrence
       },
+      {
+        id: 'det-new-6',
+        text: 'Westbrook Capital',
+        start: 1114,
+        end: 1131,
+        type: PII_TYPES.OTHER,
+        confidence: 0.90,
+      },
+      {
+        id: 'det-new-7',
+        text: 'https://apex-digital-forensics.com/portal/case-2024',
+        start: 3584,
+        end: 3635,
+        type: PII_TYPES.OTHER,
+        confidence: 0.98,
+      },
+      {
+        id: 'det-new-8',
+        text: '1900 3rd Ave, Seattle, WA 98101',
+        start: 3651,
+        end: 3682,
+        type: PII_TYPES.ADDRESS,
+        confidence: 0.92,
+      },
+      {
+        id: 'det-new-9',
+        text: 'Northwest Security Partners',
+        start: 3696,
+        end: 3723,
+        type: PII_TYPES.OTHER,
+        confidence: 0.88,
+      },
+      {
+        id: 'det-new-10',
+        text: 'PIR-2024-0312',
+        start: 3418,
+        end: 3431,
+        type: PII_TYPES.ID,
+        confidence: 0.96,
+      },
+      {
+        id: 'det-new-11',
+        text: '192.168.45.201',
+        start: 2106,
+        end: 2120,
+        type: PII_TYPES.OTHER,
+        confidence: 0.95,
+      },
+      {
+        id: 'det-mr-1',
+        text: 'Mr. Smith',
+        start: 0,
+        end: 0,
+        type: PII_TYPES.NAME,
+        confidence: 0.96,
+      },
+      {
+        id: 'det-mr-2',
+        text: 'Mr. Smith',
+        start: 0,
+        end: 0,
+        type: PII_TYPES.NAME,
+        confidence: 0.93,
+      },
+      {
+        id: 'det-mr-3',
+        text: 'Mr. Smith',
+        start: 0,
+        end: 0,
+        type: PII_TYPES.NAME,
+        confidence: 0.89,
+      },
+      {
+        id: 'det-ms-1',
+        text: 'Ms. Chen',
+        start: 0,
+        end: 0,
+        type: PII_TYPES.NAME,
+        confidence: 0.92,
+      },
+      {
+        id: 'det-ms-2',
+        text: 'Ms. Morrison',
+        start: 0,
+        end: 0,
+        type: PII_TYPES.NAME,
+        confidence: 0.91,
+      },
+      {
+        id: 'det-mr-4',
+        text: 'Mr. Vega',
+        start: 0,
+        end: 0,
+        type: PII_TYPES.NAME,
+        confidence: 0.90,
+      },
+      {
+        id: 'det-comp-1',
+        text: 'Greenfield Analytics, Inc.',
+        start: 0,
+        end: 0,
+        type: PII_TYPES.OTHER,
+        confidence: 0.98,
+      }
     ];
+
+    const finalDetections = [];
+    const occurrences = {};
+
+    for (const det of rawDetections) {
+      if (!occurrences[det.text]) occurrences[det.text] = 0;
+      
+      let searchIndex = 0;
+      for (let i = 0; i <= occurrences[det.text]; i++) {
+        searchIndex = documentText.indexOf(det.text, searchIndex);
+        if (searchIndex !== -1 && i < occurrences[det.text]) {
+          searchIndex += det.text.length;
+        }
+      }
+
+      if (searchIndex !== -1) {
+        finalDetections.push({
+          ...det,
+          start: searchIndex,
+          end: searchIndex + det.text.length
+        });
+        occurrences[det.text]++;
+      }
+    }
+
+    return finalDetections;
   }
 }
 

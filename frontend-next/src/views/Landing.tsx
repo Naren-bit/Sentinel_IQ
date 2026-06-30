@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { StepCard } from "@/components/StepCard";
-import { Search, ShieldCheck, CheckCircle, Shield, UploadCloud, PlayCircle, Sparkles } from "lucide-react";
+import { Search, ShieldCheck, CheckCircle, Shield, UploadCloud, Sparkles } from "lucide-react";
 import { useStore } from "@/lib/store";
 
 export function Landing() {
-  const { setScreen, reset } = useStore();
+  const { setScreen } = useStore();
 
   return (
     <div className="min-h-screen relative overflow-hidden font-sans">
@@ -35,14 +35,6 @@ export function Landing() {
               <UploadCloud className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
               Upload Document
             </Button>
-            <Button 
-              variant="outline"
-              onClick={() => setScreen('upload')}
-              className="rounded-[20px] px-8 py-6 text-base font-medium border-[var(--primary)] text-[var(--primary)] bg-white/70 backdrop-blur-md hover:bg-white transition-all hover:-translate-y-0.5 group"
-            >
-              <PlayCircle className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-              Watch Demo
-            </Button>
           </div>
         </div>
 
@@ -72,17 +64,20 @@ export function Landing() {
         </div>
 
         {/* CTA Banner */}
-        <div className="mt-32 w-full max-w-4xl bg-white/70 backdrop-blur-[16px] border border-white rounded-[24px] shadow-[0_12px_40px_rgba(31,41,55,0.04)] p-16 text-center animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 fill-mode-both">
-          <h2 className="text-3xl font-bold text-[var(--on-surface)] mb-4">Ready to secure your data?</h2>
-          <p className="text-[var(--on-surface-variant)] mb-8 w-full max-w-[600px] mx-auto text-lg">
-            Join industry leaders using SentinelIQ to streamline their compliance workflows.
-          </p>
-          <Button 
-            className="rounded-[20px] px-8 py-6 text-base bg-[var(--primary)] hover:bg-[var(--primary-container)] text-white shadow-md transition-transform hover:-translate-y-0.5"
-            onClick={() => setScreen('upload')}
-          >
-            Start Free Trial
-          </Button>
+        <div className="mt-32 w-full max-w-4xl relative overflow-hidden bg-white/30 backdrop-blur-[24px] border border-white/40 hover:border-white/60 hover:bg-white/40 hover:shadow-[0_24px_60px_rgba(31,41,55,0.12)] rounded-[32px] shadow-[0_12px_40px_rgba(31,41,55,0.08)] p-16 text-center animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 fill-mode-both transition-all duration-500">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-50 pointer-events-none" />
+          <div className="relative z-10">
+            <h2 className="text-3xl font-bold text-[var(--on-surface)] mb-4">Ready to secure your data?</h2>
+            <p className="text-[var(--on-surface-variant)] mb-8 w-full max-w-[600px] mx-auto text-lg">
+              Join industry leaders using SentinelIQ to streamline their compliance workflows.
+            </p>
+            <Button 
+              className="rounded-[20px] px-8 py-6 text-base bg-[var(--primary)] hover:bg-[var(--primary-container)] text-white shadow-md transition-transform hover:-translate-y-0.5"
+              onClick={() => setScreen('upload')}
+            >
+              Start Free Trial
+            </Button>
+          </div>
         </div>
       </main>
       
