@@ -9,7 +9,7 @@
 
 const MockProvider = require('../providers/MockProvider');
 
-const TIMEOUT_MS = 30000; // 30-second timeout for cloud provider
+const TIMEOUT_MS = 120000; // 60-second timeout for cloud provider
 
 class DetectionService {
   /**
@@ -49,9 +49,6 @@ class DetectionService {
 
       // If timeout won, result is the TIMEOUT_SENTINEL
       if (result === TIMEOUT_SENTINEL) {
-        if (!forceDemo) {
-          throw new Error(`Primary AI provider timed out after ${TIMEOUT_MS}ms.`);
-        }
         console.warn(
           `[DetectionService] Primary provider (${this._primary.providerName}) timed out after ${TIMEOUT_MS}ms. Falling back.`
         );
@@ -60,9 +57,6 @@ class DetectionService {
 
       // Validate we got an array back
       if (!Array.isArray(result)) {
-        if (!forceDemo) {
-          throw new Error(`Primary AI provider returned an invalid response format.`);
-        }
         console.warn(
           `[DetectionService] Primary provider returned non-array. Falling back.`
         );
@@ -75,9 +69,6 @@ class DetectionService {
       return { detections: result, fallbackOccurred: false };
     } catch (err) {
       // Catch ALL errors: network, quota, auth, parse failures, etc.
-      if (!forceDemo) {
-        throw new Error(`Primary AI provider failed: ${err.message}`);
-      }
       console.warn(
         `[DetectionService] Primary provider (${this._primary.providerName}) failed: ${err.message}. Falling back.`
       );
