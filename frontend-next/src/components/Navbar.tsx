@@ -1,14 +1,45 @@
 'use client';
 
+import { useState, useEffect, useRef } from "react";
 import { Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/lib/store";
 
 export function Navbar() {
   const { setScreen, reset, currentScreen } = useStore();
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = (e: Event) => {
+      let currentScrollY = 0;
+      
+      if (e.target === document || e.target === document.documentElement) {
+        currentScrollY = window.scrollY;
+      } else {
+        const target = e.target as HTMLElement;
+        // Ignore small scrollable elements, only listen to major containers
+        if (!target.clientHeight || target.scrollHeight <= target.clientHeight + 50) return;
+        currentScrollY = target.scrollTop;
+      }
+      
+      if (Math.abs(currentScrollY - lastScrollY.current) < 10) return;
+
+      if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { capture: true, passive: true });
+    return () => window.removeEventListener('scroll', handleScroll, { capture: true } as any);
+  }, []);
 
   return (
-    <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-5xl z-50 flex items-center justify-between px-4 py-3 bg-white/50 backdrop-blur-[20px] border border-white/40 shadow-[0_8px_32px_rgba(31,41,55,0.08)] rounded-full">
+    <nav className={`fixed left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-[1440px] z-50 flex items-center justify-between px-4 py-3 bg-white/50 backdrop-blur-[20px] border border-white/40 shadow-[0_8px_32px_rgba(31,41,55,0.08)] rounded-full transition-all duration-300 ${isVisible ? 'top-6 opacity-100' : '-top-24 opacity-0 pointer-events-none'}`}>
       <div className="flex items-center gap-2 pl-4">
         <Shield className="w-6 h-6 text-[var(--primary)] fill-[var(--primary)]" />
         <span className="text-xl font-bold text-[var(--on-surface)] tracking-tight">SentinelIQ</span>
