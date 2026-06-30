@@ -1,0 +1,28 @@
+graph TD
+    subgraph Client Environment
+        Browser[User Browser]
+    end
+
+    subgraph Internal Network / DMZ
+        Frontend[Next.js Server <br> port 3000]
+        Backend[Express.js Node API <br> port 3001]
+    end
+
+    subgraph External Dependencies
+        Gemini[Google Generative AI API <br> gemini-2.5-flash]
+    end
+
+    Browser -->|HTTPS| Frontend
+    Frontend -->|HTTP / JSON| Backend
+    Backend -->|HTTPS / API Key| Gemini
+    
+    %% Fallback representation
+    Backend -.->|In-memory| Mock[Offline Mock Provider]
+    
+    classDef client fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef internal fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef external fill:#bfb,stroke:#333,stroke-width:2px;
+    
+    class Browser client;
+    class Frontend,Backend,Mock internal;
+    class Gemini external;

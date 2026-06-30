@@ -1,0 +1,18 @@
+{
+  "name": "pii-review-priority",
+  "version": "1.0.0",
+  "description": "PII Redaction Review Priority Tool — SprintFour Hackathon",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.6",
+    "express": "^4.18.2",
+    "mammoth": "^1.12.0",
+    "multer": "^2.2.0",
+    "pdf-parse": "^1.1.1"
+  }
+}

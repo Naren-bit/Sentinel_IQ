@@ -1,0 +1,40 @@
+sequenceDiagram
+    actor User
+    participant UI as Frontend (React)
+    participant API as Express Server
+    participant Orchestrator as Detection Service
+    participant Gemini as Gemini 2.5 Flash
+    participant Verify as Verification Pass
+    participant Priority as Review Priority Engine
+
+    User->>UI: Uploads Document
+    UI->>API: POST /upload (File Blob)
+    
+    API->>Orchestrator: Extract Text & Start Pipeline
+    Orchestrator->>Gemini: Prompt + Document Text
+    
+    alt Success
+        Gemini-->>Orchestrator: JSON Detections (Offsets & Confidence)
+    else Timeout / Rate Limit / Hallucination
+        Orchestrator-->>API: Throw Exception
+        API-->>UI: 500 Error (Provider Failed)
+        UI-->>User: Display Error Banner
+    end
+    
+    Orchestrator->>Verify: Validate Schema & Offsets
+    Verify->>Verify: Auto-Repair Offsets
+    Verify->>Verify: Regex Gap Detection
+    
+    Verify->>Priority: Validated Entities
+    Priority->>Priority: Apply 6 Heuristic Rules
+    Priority->>Priority: Categorize (HIGH, STD, LOW)
+    
+    Priority-->>API: Enriched Response Array
+    API-->>UI: Return JSON Payload
+    
+    UI->>UI: Render Document with Interactive Popovers
+    UI->>UI: Render Sidebar sorted by Priority
+    
+    User->>UI: Review High-Risk Items
+    User->>UI: Click Approve
+    UI-->>User: Final Clearance

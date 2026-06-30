@@ -1,0 +1,51 @@
+classDiagram
+    class Frontend {
+        +UploadScreen
+        +ReviewQueue
+        +DocumentView
+        +DetectionCard
+        +useStore()
+    }
+
+    class API {
+        +POST /upload
+        +POST /review
+    }
+
+    class DetectionService {
+        +detect()
+        -_createTimeout()
+    }
+
+    class CloudLLMProvider {
+        -_apiKey
+        +detect()
+        -_buildPrompt()
+        -_repairOffsets()
+    }
+
+    class MockProvider {
+        +detect()
+    }
+
+    class VerificationEngine {
+        +validateDetection()
+        +validateOffsets()
+    }
+
+    class ReviewPriorityEngine {
+        +enrichDetections()
+        +findUndetectedCandidates()
+    }
+
+    Frontend --> API : HTTP Request
+    API --> DetectionService : Orchestrates
+    
+    DetectionService --> CloudLLMProvider : Primary (Gemini)
+    DetectionService --> MockProvider : Fallback (Demo)
+    
+    CloudLLMProvider --> VerificationEngine : Validates output
+    VerificationEngine --> ReviewPriorityEngine : Verified Candidates
+    
+    ReviewPriorityEngine --> API : Returns Enriched Detections
+    API --> Frontend : JSON Response
