@@ -14,11 +14,11 @@
  * - Otherwise → MockProvider only
  */
 // Hardcoded for demo purposes as requested by user
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 process.env.GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 
 const express = require('express');
-const path = require('path');
 const multer = require('multer');
 const cors = require('cors');
 const DetectionService = require('./services/DetectionService');
