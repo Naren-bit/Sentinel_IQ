@@ -14,6 +14,7 @@
  * - Otherwise → MockProvider only
  */
 // Hardcoded for demo purposes as requested by user
+require('dotenv').config();
 process.env.GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 
 const express = require('express');
