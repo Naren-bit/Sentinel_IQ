@@ -6,10 +6,7 @@ export function Complete() {
   const { documentName, detections, reset } = useStore();
 
   return (
-    <div className="min-h-screen bg-[var(--background)] flex items-center justify-center p-6 font-sans relative overflow-hidden">
-      
-      {/* Background Gradients */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-[var(--surface-container-high)] opacity-60 blur-[120px] rounded-full pointer-events-none" />
+    <div className="min-h-screen bg-transparent flex items-center justify-center p-6 font-sans relative overflow-hidden">
       
       <div className="max-w-md w-full bg-white/80 backdrop-blur-[20px] rounded-[24px] border border-[var(--outline-variant)]/50 p-12 text-center shadow-[0_12px_40px_rgba(31,41,55,0.08)] animate-in zoom-in-95 duration-500 relative z-10">
         <div className="w-24 h-24 bg-[var(--tertiary-fixed)] rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm">

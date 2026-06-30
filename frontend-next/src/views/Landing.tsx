@@ -2,16 +2,12 @@ import { Button } from "@/components/ui/button";
 import { StepCard } from "@/components/StepCard";
 import { Search, ShieldCheck, CheckCircle, Shield, UploadCloud, PlayCircle, Sparkles } from "lucide-react";
 import { useStore } from "@/lib/store";
-import { LiquidBackground } from "@/components/LiquidBackground";
 
 export function Landing() {
   const { setScreen, reset } = useStore();
 
   return (
     <div className="min-h-screen relative overflow-hidden font-sans">
-      
-      {/* Live Liquid Glass Background */}
-      <LiquidBackground />
       
       <main className="max-w-[1440px] mx-auto px-10 pt-40 pb-24 relative z-10 flex flex-col items-center">
         

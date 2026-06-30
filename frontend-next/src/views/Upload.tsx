@@ -55,11 +55,8 @@ export function Upload() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] font-sans flex flex-col relative overflow-hidden">
-      {/* Background gradients */}
-      <div className="absolute top-0 right-0 w-[60vw] h-[60vw] rounded-full bg-[var(--surface-container-high)] opacity-50 blur-[120px] pointer-events-none" />
-
-      <main className="flex-1 overflow-auto px-10 pt-32 pb-12 relative z-10">
+    <div className="flex flex-col min-h-screen bg-transparent font-sans">
+      <main className="flex-1 overflow-auto px-6 pt-32 pb-12 relative z-10">
           <div className="max-w-[1440px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
             
             <h2 className="text-[32px] font-bold text-[var(--on-surface)] mb-8">Start a Review</h2>

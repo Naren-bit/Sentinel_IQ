@@ -65,11 +65,14 @@ export function ReviewView() {
   }, [nudgeVisible]);
 
   return (
-    <div className="min-h-screen bg-[var(--background)] font-sans flex relative overflow-hidden">
+    <div className="min-h-screen bg-transparent font-sans flex flex-col items-center overflow-hidden relative">
         
-      {/* Sidebar */}
-      <aside className="w-[280px] bg-white border-r border-[var(--outline-variant)]/40 flex flex-col z-20 shadow-sm shrink-0 pt-28">
-          <div className="p-6 border-b border-[var(--outline-variant)]/40">
+      {/* Wrapper perfectly aligned with Navbar */}
+      <div className="w-full max-w-[1440px] px-6 pt-28 pb-6 flex gap-6 flex-1 overflow-hidden relative z-10">
+        
+        {/* Sidebar - Glassmorphism Panel */}
+        <aside className="w-[280px] bg-white/40 backdrop-blur-[20px] border border-white/50 rounded-3xl flex flex-col shadow-[0_8px_32px_rgba(31,41,55,0.05)] shrink-0 overflow-hidden">
+          <div className="p-6 border-b border-white/30">
             <div className="flex items-center gap-3 mb-1">
               <div className="w-8 h-8 rounded-[8px] bg-slate-900 flex items-center justify-center text-[var(--primary-fixed-dim)]">
                 <FileDigit className="w-5 h-5" />
@@ -118,10 +121,10 @@ export function ReviewView() {
           </div>
         </aside>
 
-        {/* Main Content Area */}
-        <main className="flex-1 flex flex-col relative h-screen pt-28">
+        {/* Main Content Area - Glassmorphism Panel */}
+        <main className="flex-1 flex flex-col relative bg-white/40 backdrop-blur-[20px] border border-white/50 rounded-3xl shadow-[0_8px_32px_rgba(31,41,55,0.05)] overflow-hidden">
           {/* Scrollable Content */}
-          <div className="flex-1 overflow-auto bg-[var(--background)] p-8 relative">
+          <div className="flex-1 overflow-auto p-8 relative">
             <div className="absolute top-0 right-0 w-[40vw] h-[40vw] rounded-full bg-[var(--surface-container-high)] opacity-40 blur-[100px] pointer-events-none" />
             
             {fallbackOccurred && (
@@ -283,6 +286,7 @@ export function ReviewView() {
             </Button>
           </div>
         </main>
+      </div>
     </div>
   );
 }
