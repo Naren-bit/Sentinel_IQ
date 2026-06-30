@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { StepCard } from "@/components/StepCard";
 import { Search, ShieldCheck, CheckCircle, Shield, UploadCloud, PlayCircle, Sparkles } from "lucide-react";
 import { useStore } from "@/lib/store";
+import { LiquidBackground } from "@/components/LiquidBackground";
 
 export function Landing() {
   const { setScreen, reset } = useStore();
@@ -9,10 +10,8 @@ export function Landing() {
   return (
     <div className="min-h-screen bg-[var(--background)] relative overflow-hidden font-sans">
       
-      {/* Live Background Blobs */}
-      <div className="absolute top-[-10%] right-[-5%] w-[45vw] h-[45vw] rounded-full bg-[var(--primary)] opacity-[0.12] blur-[120px] pointer-events-none animate-blob" />
-      <div className="absolute top-[20%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[var(--tertiary)] opacity-[0.10] blur-[140px] pointer-events-none animate-blob animation-delay-2000" />
-      <div className="absolute bottom-[-10%] right-[15%] w-[40vw] h-[40vw] rounded-full bg-[var(--secondary)] opacity-[0.10] blur-[130px] pointer-events-none animate-blob animation-delay-4000" />
+      {/* Live Liquid Glass Background */}
+      <LiquidBackground />
       
       {/* Top Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-10 py-4 bg-white/70 backdrop-blur-[20px] border-b border-white/40 shadow-[0_4px_20px_rgba(31,41,55,0.02)]">
