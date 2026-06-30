@@ -32,8 +32,26 @@ const app = express();
 
 // ─── Middleware ─────────────────────────────────────────────────────────────────
 
-// Enable CORS for Next.js frontend on port 3000
-app.use(cors({ origin: 'http://localhost:3000' }));
+// Enable CORS for frontend (local dev + deployed Vercel URL)
+const allowedOrigins = [
+  'http://localhost:3000',
+  process.env.FRONTEND_URL, // Set this on Render to your Vercel URL
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+      return callback(null, true);
+    }
+    // In production, also allow any *.vercel.app origin
+    if (origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    }
+    callback(null, false);
+  }
+}));
 app.use(express.json({ limit: '1mb' }));
 
 
