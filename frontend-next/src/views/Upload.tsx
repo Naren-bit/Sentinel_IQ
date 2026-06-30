@@ -16,7 +16,7 @@ export function Upload() {
     setError(null);
     try {
       const data = await action() as {
-        detections?: { id: string; text: string; type: string; start: number; end: number }[];
+        detections?: { id: string; text: string; type: string; start: number; end: number; confidence?: number; source?: string }[];
         enrichments?: { detectionId: string; priorityTier: string; reasons: string[]; drivingSignal?: string }[];
         fileName?: string;
         documentText?: string;
@@ -25,7 +25,7 @@ export function Upload() {
       const rawDetections = data.detections || [];
       const enrichments = data.enrichments || [];
       
-      const mergedDetections = rawDetections.map((det: { id: string; text: string; type: string; start: number; end: number }) => {
+      const mergedDetections = rawDetections.map((det: { id: string; text: string; type: string; start: number; end: number; confidence?: number; source?: string }) => {
         const enrichment = enrichments.find((e: { detectionId: string; priorityTier: string; reasons: string[]; drivingSignal?: string }) => e.detectionId === det.id) || {
           priorityTier: 'LOW',
           reasons: [],
