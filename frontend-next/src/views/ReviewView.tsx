@@ -68,7 +68,7 @@ export function ReviewView() {
     <div className="min-h-screen bg-[var(--background)] font-sans flex relative overflow-hidden">
         
       {/* Sidebar */}
-      <aside className="w-[280px] bg-white border-r border-[var(--outline-variant)]/40 flex flex-col z-20 shadow-sm shrink-0">
+      <aside className="w-[280px] bg-white border-r border-[var(--outline-variant)]/40 flex flex-col z-20 shadow-sm shrink-0 pt-28">
           <div className="p-6 border-b border-[var(--outline-variant)]/40">
             <div className="flex items-center gap-3 mb-1">
               <div className="w-8 h-8 rounded-[8px] bg-slate-900 flex items-center justify-center text-[var(--primary-fixed-dim)]">
@@ -119,34 +119,7 @@ export function ReviewView() {
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 flex flex-col relative h-screen">
-          {/* Top Navbar */}
-          <nav className="flex items-center justify-between px-8 py-4 border-b border-[var(--outline-variant)]/40 bg-white/50 backdrop-blur-md z-10 shrink-0">
-            <div className="flex items-center gap-2">
-              <Shield className="w-6 h-6 text-[var(--primary)] fill-[var(--primary)]" />
-              <span className="text-xl font-bold text-[var(--on-surface)] tracking-tight">SentinelIQ</span>
-            </div>
-            <div className="hidden lg:flex items-center gap-6 text-[var(--on-surface-variant)] text-sm font-medium">
-              <button onClick={reset} className="hover:text-[var(--on-surface)] transition-colors cursor-pointer">Dashboard</button>
-              <button className="text-[var(--primary)] border-b-2 border-[var(--primary)] pb-1 cursor-pointer">Review Queue</button>
-              <button onClick={() => { setNudgeMessage('Audit Logs module is not active in this demo.'); setNudgeVisible(true); }} className="hover:text-[var(--on-surface)] transition-colors cursor-pointer">Audit Logs</button>
-              <button onClick={() => { setNudgeMessage('Settings module is not active in this demo.'); setNudgeVisible(true); }} className="hover:text-[var(--on-surface)] transition-colors cursor-pointer">Settings</button>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input type="text" placeholder="Search..." className="pl-9 pr-4 py-2 rounded-full border border-[var(--outline-variant)] bg-white text-sm focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] w-48" />
-              </div>
-              <Button 
-                onClick={reset} 
-                className="rounded-[20px] px-6 bg-[var(--primary)] hover:bg-[var(--primary-container)] text-white shadow-sm cursor-pointer"
-              >
-                Get Started
-              </Button>
-              <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-white text-xs font-medium cursor-pointer">U</div>
-            </div>
-          </nav>
-
+        <main className="flex-1 flex flex-col relative h-screen pt-28">
           {/* Scrollable Content */}
           <div className="flex-1 overflow-auto bg-[var(--background)] p-8 relative">
             <div className="absolute top-0 right-0 w-[40vw] h-[40vw] rounded-full bg-[var(--surface-container-high)] opacity-40 blur-[100px] pointer-events-none" />

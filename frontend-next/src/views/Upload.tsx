@@ -59,32 +59,7 @@ export function Upload() {
       {/* Background gradients */}
       <div className="absolute top-0 right-0 w-[60vw] h-[60vw] rounded-full bg-[var(--surface-container-high)] opacity-50 blur-[120px] pointer-events-none" />
 
-      {/* Top Navbar */}
-      <nav className="flex items-center justify-between px-10 py-6 border-b border-[var(--outline-variant)]/40 relative z-10 bg-white/50 backdrop-blur-md">
-        <div className="flex items-center gap-2">
-          <Shield className="w-6 h-6 text-[var(--primary)] fill-[var(--primary)]" />
-          <span className="text-xl font-bold text-[var(--on-surface)] tracking-tight">SentinelIQ</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8 text-[var(--on-surface-variant)] text-sm font-medium">
-          <button onClick={reset} className="hover:text-[var(--on-surface)] transition-colors pb-1 cursor-pointer">Dashboard</button>
-          <button className="text-[var(--primary)] border-b-2 border-[var(--primary)] pb-1 cursor-pointer">Review Queue</button>
-          <button onClick={() => setError('Audit Logs module is not active in this demo.')} className="hover:text-[var(--on-surface)] transition-colors pb-1 cursor-pointer">Audit Logs</button>
-          <button onClick={() => setError('Settings module is not active in this demo.')} className="hover:text-[var(--on-surface)] transition-colors pb-1 cursor-pointer">Settings</button>
-        </div>
-        <div className="flex items-center gap-4">
-          <Button 
-            className="rounded-[20px] px-6 bg-[var(--primary)] hover:bg-[var(--primary-container)] text-white shadow-sm transition-transform hover:-translate-y-0.5"
-            onClick={reset}
-          >
-            Go Back
-          </Button>
-          <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-white text-xs font-medium cursor-pointer hover:bg-slate-700">
-            U
-          </div>
-        </div>
-      </nav>
-
-      <main className="flex-1 overflow-auto px-10 py-12 relative z-10">
+      <main className="flex-1 overflow-auto px-10 pt-32 pb-12 relative z-10">
           <div className="max-w-[1440px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
             
             <h2 className="text-[32px] font-bold text-[var(--on-surface)] mb-8">Start a Review</h2>
