@@ -1,6 +1,8 @@
 # SentinelIQ
 
 ## **[https://sentinel-iq-five.vercel.app/](https://sentinel-iq-five.vercel.app/)**
+### **Demo Video: [https://youtu.be/UUlbiIT3T7k](https://youtu.be/UUlbiIT3T7k)**
+> Note: Network is very slow so the link might still be uploading the video.
 
 **PII Review Priority Tool — Built for the SprintFour Hackathon**
 
