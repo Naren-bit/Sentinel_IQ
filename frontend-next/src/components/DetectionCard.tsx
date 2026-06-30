@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, MoreHorizontal } from "lucide-react";
 import type { Detection } from "@/lib/store";
@@ -33,6 +34,12 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
   };
 
   const style = tierStyles[detection.priorityTier] || tierStyles.STANDARD;
+  const [outcome, setOutcome] = useState<'approved' | 'dismissed' | null>(null);
+
+  const handleAction = (action: 'approved' | 'dismissed') => {
+    setOutcome(action);
+    onReview?.(detection.detectionId);
+  };
 
   return (
     <div className={`relative bg-white/80 backdrop-blur-[16px] rounded-[16px] shadow-[0_4px_20px_rgba(31,41,55,0.04)] border-y border-r border-y-[var(--outline-variant)]/40 border-r-[var(--outline-variant)]/40 border-l-4 ${style.border} transition-all duration-300 ${isReviewed ? 'opacity-60 grayscale-[50%] scale-[0.98]' : 'opacity-100 hover:shadow-[0_12px_40px_rgba(31,41,55,0.08)]'}`}>
@@ -93,16 +100,49 @@ export function DetectionCard({ detection, isReviewed = false, onReview, showAct
         {showAction && (
           <div className="mt-6 pt-4 border-t border-[var(--outline-variant)]/30 flex justify-end">
             {!isReviewed ? (
-              <Button 
-                onClick={() => onReview?.(detection.detectionId)}
-                className="rounded-[20px] px-6 bg-[var(--primary)] hover:bg-[var(--primary-container)] text-white shadow-sm transition-transform hover:-translate-y-0.5"
-              >
-                {detection.source === 'verification' ? 'Confirm Gap Redaction' : 'Approve AI Flag'}
-              </Button>
+              <div className="flex items-center gap-3">
+                {detection.source === 'verification' ? (
+                  <>
+                    <Button 
+                      variant="outline"
+                      onClick={() => handleAction('dismissed')}
+                      className="rounded-[20px] px-6 text-[var(--on-surface-variant)] border-[var(--outline)]"
+                    >
+                      Ignore
+                    </Button>
+                    <Button 
+                      onClick={() => handleAction('approved')}
+                      className="rounded-[20px] px-6 bg-[var(--primary)] hover:bg-[var(--primary-container)] text-white shadow-sm transition-transform hover:-translate-y-0.5"
+                    >
+                      Confirm Gap Redaction
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button 
+                      variant="outline"
+                      onClick={() => handleAction('dismissed')}
+                      className="rounded-[20px] px-6 text-[var(--on-surface-variant)] border-[var(--outline)]"
+                    >
+                      Dismiss (Reveal)
+                    </Button>
+                    <Button 
+                      onClick={() => handleAction('approved')}
+                      className="rounded-[20px] px-6 bg-[var(--primary)] hover:bg-[var(--primary-container)] text-white shadow-sm transition-transform hover:-translate-y-0.5"
+                    >
+                      Approve AI Flag
+                    </Button>
+                  </>
+                )}
+              </div>
             ) : (
               <div className="flex items-center gap-2 text-[var(--tertiary)] font-medium px-4 py-2">
                 <CheckCircle2 className="w-5 h-5" />
-                Reviewed
+                {outcome === 'dismissed' 
+                  ? "Reveal confirmed — this stays visible" 
+                  : outcome === 'approved' 
+                    ? "Redaction added — this is now hidden" 
+                    : "Reviewed (Bulk)"}
               </div>
             )}
           </div>
